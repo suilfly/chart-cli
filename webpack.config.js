@@ -1,4 +1,5 @@
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const { VueLoaderPlugin } = require('vue-loader');
 
 module.exports = {
   entry: './src/index.ts',
@@ -6,7 +7,7 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /.s[ac]ss$/,
+        test: /\.s[ac]ss$/,
         use: [
           'style-loader',
           'css-loader',
@@ -19,12 +20,22 @@ module.exports = {
         ],
       },
       {
-        test: /.ts$/,
-        use: 'ts-loader',
+        test: /\.ts$/,
+        loader: 'ts-loader',
+        options: {
+          appendTsSuffixTo: [/\.vue$/],
+        },
+      },
+      {
+        test: /\.vue$/,
+        use: 'vue-loader',
       },
     ],
   },
-  plugins: [new HtmlWebpackPlugin({ template: './src/index.html' })],
+  plugins: [
+    new HtmlWebpackPlugin({ template: './src/index.html' }),
+    new VueLoaderPlugin(),
+  ],
   devServer: {
     hot: true,
   },
